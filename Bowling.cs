@@ -57,10 +57,11 @@ public class BowlingGame
                 {
                     throw new ArgumentException();
                 }
-                lastFrame.DoRoll(pins);
-                finalScore += pins;
+
+                lastFrame.DoRoll(pins);                
                 if (lastFrame.IsFrameCompleted)
                 {
+                    finalScore += lastFrame.GetFrameScoreWithBonus();
                     new_frameArrayIndex++;
                 }
             }
@@ -77,9 +78,10 @@ public class BowlingGame
                 throw new ArgumentException();
             }
 
-            if (currentFrame.IsStrike() && new_frameArrayIndex < 9)
+            if (currentFrame.IsStrike() && new_frameArrayIndex <= 9)
             {
-                GetNextFrame()?.ApplyStrike();
+                if (new_frameArrayIndex < 9)
+                    GetNextFrame()?.ApplyStrike();
                 if (IsPreviousFrameStrike())
                 {
                     GetNextFrame()?.CarryPreviousStrikeBonus();
@@ -101,7 +103,7 @@ public class BowlingGame
 
     private Frame GetNextFrame()
     {
-        return new_frameArrayIndex < 9 ? framesInGame[new_frameArrayIndex + 1] : null;
+        return new_frameArrayIndex < 10 ? framesInGame[new_frameArrayIndex + 1] : null;
     }
     private Frame GetPreviousFrame()
     {
